@@ -1,0 +1,56 @@
+ID: DEF-001
+Название: Некорректная обработка пустого символа в методе contains
+Описание: Метод StringUtils.contains возвращает True, если передан пустой символ (""), 
+что противоречит ожидаемому поведению теста. Тест ожидает False для пустого символа.
+Шаги для воспроизведения:
+  1. Создать объект StringUtils: utils = StringUtils()
+  2. Вызвать utils.contains("SkyPro", "")
+Ожидаемый результат: False
+Фактический результат: True
+Приоритет: Средний
+Рекомендация: Добавить проверку на пустой символ в начале метода:
+    if not string or not symbol:
+        return False
+
+
+ID: DEF-002
+Название: Метод capitalize не обрабатывает None
+Описание: Если в метод capitalize передан None, происходит ошибка TypeError, так как None не имеет метода capitalize().
+Шаги для воспроизведения:
+  1. Создать объект StringUtils: utils = StringUtils()
+  2. Вызвать utils.capitalize(None)
+Ожидаемый результат: ""
+Фактический результат: TypeError
+Приоритет: Средний
+Рекомендация: Добавить проверку:
+    if not string:
+        return ""
+
+
+ID: DEF-003
+Название: Метод trim не обрабатывает None
+Описание: Если в метод trim передан None, возникает ошибка AttributeError, так как None не имеет метода startswith() или lstrip().
+Шаги для воспроизведения:
+  1. Создать объект StringUtils: utils = StringUtils()
+  2. Вызвать utils.trim(None)
+Ожидаемый результат: ""
+Фактический результат: AttributeError
+Приоритет: Средний
+Рекомендация: Добавить проверку:
+    if not string:
+        return ""
+
+
+ID: DEF-004
+Название: Метод delete_symbol не обрабатывает None
+Описание: Если в метод delete_symbol передан None в качестве строки, возникает ошибка AttributeError при вызове replace().
+Шаги для воспроизведения:
+  1. Создать объект StringUtils: utils = StringUtils()
+  2. Вызвать utils.delete_symbol(None, "k")
+Ожидаемый результат: ""
+Фактический результат: AttributeError
+Приоритет: Средний
+Рекомендация: Добавить проверку:
+    if not string:
+        return ""
+        
