@@ -6,13 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.get("http://uitestingplayground.com/ajax")
-
-driver.find_element(By.ID, "ajaxButton").click()
-WebDriverWait(driver, 20).until(
-    EC.text_to_be_present_in_element(
-        (By.CLASS_NAME, "bg-success"), "Data loaded"
-    )
+driver.get(
+    "https://bonigarcia.dev/selenium-webdriver-java/loading-images.html"
 )
-print(driver.find_element(By.CLASS_NAME, "bg-success").text)
+
+# Ждём, пока появится третья картинка
+third_img = WebDriverWait(driver, 20).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, "img:nth-of-type(3)"))
+)
+
+print(third_img.get_attribute("src"))
 driver.quit()
