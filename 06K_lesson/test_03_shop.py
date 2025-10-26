@@ -10,54 +10,47 @@ def test_shop_total():
     driver = webdriver.Firefox(
         service=Service(GeckoDriverManager().install())
     )
-    driver.get("https://www.saucedemo.com/")
     wait = WebDriverWait(driver, 20)
+    driver.get("https://www.saucedemo.com/")
 
-    wait.until(
-        EC.visibility_of_element_located((By.ID, "user-name"))
-    ).send_keys("standard_user")
+    wait.until(EC.visibility_of_element_located(
+        (By.ID, "user-name")
+    )).send_keys("standard_user")
     driver.find_element(By.ID, "password").send_keys("secret_sauce")
     driver.find_element(By.ID, "login-button").click()
 
-    wait.until(
-        EC.element_to_be_clickable(
-            (By.ID, "add-to-cart-sauce-labs-backpack")
-        )
-    ).click()
-    driver.find_element(
-        By.ID, "add-to-cart-sauce-labs-bolt-t-shirt"
-    ).click()
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-onesie").click()
+    for item_id in [
+        "add-to-cart-sauce-labs-backpack",
+        "add-to-cart-sauce-labs-bolt-t-shirt",
+        "add-to-cart-sauce-labs-onesie"
+    ]:
+        wait.until(EC.element_to_be_clickable(
+            (By.ID, item_id)
+        )).click()
 
     driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-    wait.until(
-        EC.element_to_be_clickable((By.ID, "checkout"))
-    ).click()
+    wait.until(EC.element_to_be_clickable(
+        (By.ID, "checkout")
+    )).click()
 
-    wait.until(
-        EC.visibility_of_element_located((By.ID, "first-name"))
-    ).send_keys("Иван")
-    driver.find_element(By.ID, "last-name").send_keys("Петров")
-    driver.find_element(By.ID, "postal-code").send_keys("12345")
+    fields = {
+        "first-name": "Иван",
+        "last-name": "Петров",
+        "postal-code": "12345"
+    }
+
+    for field_id, value in fields.items():
+        wait.until(EC.visibility_of_element_located(
+            (By.ID, field_id)
+        )).send_keys(value)
+
     driver.find_element(By.ID, "continue").click()
 
-    total_text = wait.until(
-        EC.visibility_of_element_located(
-            (By.CLASS_NAME, "summary_total_label")
-        )
-    ).text
-
-    if total_text == "Total: $58.29":
-        print(f"✅ Тест пройден: {total_text}")
-    else:
-        print(
-            f"❌ Тест не пройден: ожидалось $58.29, получено "
-            f"{total_text}"
-        )
-        assert False
+    total_text = wait.until(EC.visibility_of_element_located(
+        (By.CLASS_NAME, "summary_total_label")
+    )).text
+    assert total_text == "Total: $58.29", (
+        f"Ожидалось Total: $58.29, получено {total_text}"
+    )
 
     driver.quit()
-
-
-if __name__ == "__main__":
-    test_shop_total()
