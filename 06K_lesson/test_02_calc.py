@@ -16,27 +16,16 @@ def test_calc_result():
     driver.find_element(By.ID, "delay").clear()
     driver.find_element(By.ID, "delay").send_keys("45")
 
-    driver.find_element(By.XPATH, "//span[text()='7']").click()
-    driver.find_element(By.XPATH, "//span[text()='+']").click()
-    driver.find_element(By.XPATH, "//span[text()='8']").click()
-    driver.find_element(By.XPATH, "//span[text()='=']").click()
+    for symbol in ["7", "+", "8", "="]:
+        driver.find_element(By.XPATH, f"//span[text()='{symbol}']").click()
 
     WebDriverWait(driver, 50).until(
-        EC.text_to_be_present_in_element((By.CLASS_NAME, "screen"), "15")
+        EC.text_to_be_present_in_element(
+            (By.CLASS_NAME, "screen"), "15"
+        )
     )
 
     result = driver.find_element(By.CLASS_NAME, "screen").text
-
-    if result == "15":
-        print(f"✅ Тест пройден: результат {result}")
-    else:
-        print(
-            f"❌ Тест не пройден: ожидалось 15, получено {result}"
-        )
-        assert False
+    assert result == "15", f"Ожидалось 15, получено {result}"
 
     driver.quit()
-
-
-if __name__ == "__main__":
-    test_calc_result()
