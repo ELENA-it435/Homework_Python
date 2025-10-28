@@ -6,7 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 class CalculatorPage:
     def __init__(self, driver):
         self.driver = driver
-        self.url = "https://bonigarcia.dev/selenium-webdriver-java/slow-calculator.html"
+        self.url = (
+            "https://bonigarcia.dev/selenium-webdriver-java/"
+            "slow-calculator.html"
+        )
         self.delay_input = (By.ID, "delay")
         self.screen = (By.CLASS_NAME, "screen")
 
@@ -19,7 +22,10 @@ class CalculatorPage:
         delay.send_keys(value)
 
     def click_button(self, symbol: str):
-        self.driver.find_element(By.XPATH, f"//span[text()='{symbol}']").click()
+        self.driver.find_element(
+            By.XPATH,
+            f"//span[text()='{symbol}']"
+        ).click()
 
     def wait_for_result(self, expected_text: str, timeout: int = 50):
         WebDriverWait(self.driver, timeout).until(
